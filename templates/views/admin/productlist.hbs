@@ -1,0 +1,165 @@
+{{>header}}
+{{!-- sidenav --}}
+ {{>nav}}
+
+<section class="main_content dashboard_part">
+
+    <div class="container-fluid g-0">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                {{!-- header common --}}
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                        <div class="search_inner">
+                            <form action="#">
+                                <div class="search_field">
+                                    <input type="text" placeholder="Search here...">
+                                </div>
+                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/client_img.png" alt="#">
+                            <div class="profile_info_iner">
+                                <p>Welcome Admin!</p>
+                                <h5>Travor James</h5>
+                                <div class="profile_info_details">
+                                    <a href="#">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>
+                                    <a href="#">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               {{!-- .common-inner-content  --}}
+               <div class="common-inner-content p-5">
+                    <div class="col-sm-12">
+                     <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">Products</h5>
+                            </div>
+                            <div class="col-auto custom-list d-flex">
+                                <div class="form-custom me-2">
+                                    <div id="tableSearch" class="dataTables_wrapper">
+                                    </div>
+                                </div>
+                                <div class="multipleSelection">
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="feather-filter me-1"></i> Filter </p>
+                                        <span class="down-icon"><i class="feather-chevron-down"></i></span>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-5">
+                        <div class="table-responsive">
+                            <div id="data-table_wrapper" class="dataTables_wrapper">
+                               
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="datatable table table-bordered hover-table dataTable "
+                                            id="data-table" role="grid">
+                                            <thead class="thead-light">
+
+                                                <tr role="row">
+                                                    <th class="sorting_asc" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="ID: activate to sort column descending"
+                                                        >ID</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Patient: activate to sort column ascending"
+                                                        style="width: 398.25px;">Name</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Last Visit: activate to sort column ascending"
+                                                        >Price</th>
+                                                     
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Blood group: activate to sort column ascending"
+                                                        >Category</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each productlist}}
+                                               {{!-- single patient --}}
+                                                <tr role="row" class="odd">
+                                                    <td class="sorting_1">#{{this.id}}</td>
+                                                    <td>
+                                                       <span class="user-name" style="color: black;font-weight:bold">{{this.name}}</span>
+                                                    </td>
+                                                    <td><span class="user-name">{{this.price}} </span><span
+                                                            class="d-block"></span></td>
+                                                   
+                                                    <td>{{this.category}}</td>
+                                                   
+                                                    <td>
+
+                                                        {{ activedeactiveControlAdmin this.id  this.published  ../userData.id}}
+                                                       
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/shop/singleproductupdate/{{this.id}}" class="btn btn-success"><span class="user-name">View</span> <span class="text-muted"></span></a>
+                                                    </td>
+                                                </tr>
+                                               {{/each}}
+                                            </tbody>
+                                        </table>
+                                       
+                                    
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+
+             </div>
+
+               </div>
+              
+            </div>
+        </div>
+    </div>
+
+   
+
+    {{!-- mini footer --}}
+    <div class="footer_part">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="footer_iner text-center">
+                        <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- footer  --}}
+{{>footer}}

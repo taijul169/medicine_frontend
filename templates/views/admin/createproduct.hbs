@@ -1,0 +1,364 @@
+{{>header}}
+{{!-- sidenav --}}
+ {{>nav}}
+
+<section class="main_content dashboard_part">
+
+    <div class="container-fluid g-0">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                {{!-- header common --}}
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                        <div class="search_inner">
+                            <form action="#">
+                                <div class="search_field">
+                                    <input type="text" placeholder="Search here...">
+                                </div>
+                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/client_img.png" alt="#">
+                            <div class="profile_info_iner">
+                                <p>Welcome Admin!</p>
+                                <h5>Travor James</h5>
+                                <div class="profile_info_details">
+                                    <a href="#">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>
+                                    <a href="#">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               {{!-- .common-inner-content  --}}
+               <div class="common-inner-content p-5">
+          <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="card-title"> Create Product<span
+                                            class="badge badge-pill badge-danger pl-4"></span></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                           
+                                    <form class="p-5" id="myForm">
+                                        <div class="row">
+                                           <div class="col-md-12">
+                                               <div class="alert  alert-dismissible fade show alert_custom  alert-success" role="alert" id="custom_alert_box" style="display: none;">
+                                                <strong>Success</strong> New Product has been created.
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                             </div>
+                                           </div>
+                                         
+                                            <div class="form-group col-md-4">
+                                                <label for="inputEmail4">Name</label>
+                                                <input type="text" class="form-control" id="name" value="{{userData.name}}" required name="name">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputAddress">Price</label>
+                                                <input type="number" class="form-control" id="price" value="{{userData.phone}}"  required name="price" >
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputAddress">Stock</label>
+                                                <input type="number" class="form-control" id="stock" value="{{userData.phone}}"  required name="stock" >
+                                            </div> 
+                                            {{!-- active deactive controller --}}
+                                            <div class="form-group col-md-4 align-items-end text-right d-none" style="text-align: right;">
+                                                <span class="d-block">Go Online/Offline</span>
+                                                
+                                            
+                                                <label class="switch">
+                                                    
+                                                {{#if userData.isonline}}
+                                                    <input type="checkbox" checked onclick=" return OnlineOfflineController(0)">
+                                                {{/if}}
+                                                {{#unless userData.isonline}}
+                                                    <input type="checkbox" onclick="return OnlineOfflineController(1)">
+                                                {{/unless}}
+                                                <span class="slider"></span>
+                                                </label>
+
+                                                <script>
+                                                    const OnlineOfflineController = async(status)=>{
+                                                        if(status){
+                                                            window.alert("are you sure to activate your shop?")
+                                                        }else{
+                                                            window.alert("are you sure to deactivated your shop?")
+                                                        }
+                                                        const response  = await  fetch(`http://localhost:8080/api/shop/shopstatusupdatebyshop/${userid.value}/${status}`, {
+                                                                method: 'PUT', 
+                                                            })
+                                                        location.reload();  
+                                                        console.log("response:",response)   
+                                                    }
+                                                </script>
+                                            </div>
+                                            <style>
+                                                .switch {
+                                                    position: relative;
+                                                    display: inline-block;
+                                                    width: 60px;
+                                                    height: 34px;
+                                                    }
+                                                    .switch input { 
+                                                    opacity: 0;
+                                                    width: 0;
+                                                    height: 0;
+                                                    }
+
+                                                    .slider {
+                                                    position: absolute;
+                                                    cursor: pointer;
+                                                    top: 0;
+                                                    left: 0;
+                                                    right: 0;
+                                                    bottom: 0;
+                                                    background-color: #ccc;
+                                                    -webkit-transition: .4s;
+                                                    transition: .4s;
+                                                    }
+
+                                                    .slider:before {
+                                                    position: absolute;
+                                                    content: "";
+                                                    height: 26px;
+                                                    width: 26px;
+                                                    left: 4px;
+                                                    bottom: 4px;
+                                                    background-color: white;
+                                                    -webkit-transition: .4s;
+                                                    transition: .4s;
+                                                    }
+
+                                                    input:checked + .slider {
+                                                    background-color: #0ce0ff;
+                                                    }
+
+                                                    input:focus + .slider {
+                                                    box-shadow: 0 0 1px #0ce0ff;
+                                                    }
+
+                                                    input:checked + .slider:before {
+                                                    -webkit-transform: translateX(26px);
+                                                    -ms-transform: translateX(26px);
+                                                    transform: translateX(26px);
+                                                    }
+
+                                            </style>
+                                          
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="form-group col-md-4">
+                                                <label for="inputCity">Category</label>
+                                                <select name="category" id="category" class="form-control form-select" required>
+                                                    <option value="Tablet">Tablet</option>
+                                                </select>
+                                            
+                                            </div>
+                                            
+                                            <div class="form-group col-md-4">
+                                                <label for="inputZip">Genericname</label>
+                                                <input type="text" class="form-control" id="genericname" value="{{userData.genericname}}"  required name="genericname" >
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputZip">Company Name</label>
+                                                <input type="text" class="form-control" id="company"value="{{userData.company}}"   required name="company" >
+                                            </div>
+                                              <div class="form-group col-md-4">
+                                                <label for="inputZip">Strength</label>
+                                                <input type="number" class="form-control" id="strength"value="{{userData.strength}}"   required name="strength" >
+                                            </div>
+                                            
+                                            <div class="form-group col-md-8">
+                                                <label for="inputAddress2">Description</label>
+                                                <textarea name="description" id="description" cols="2" rows="2" class="form-control"></textarea>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label for="inputAddress2">Product Photo</label>
+                                                <input type="file" id="nidphoto" class="form-control" name="nidphoto" onchange="loadFileNid(event)">
+                                                <label class="avatar profile-cover-avatar" for="avatar_upload">
+                                                    
+                                                    <img class="avatar-img" src="{{userData.nidphoto}}"  id="output_nid" alt="Profile Image" onerror="this.onerror=null; this.src='/assets_old/img/default.jpg'">
+                                                    
+                                                    <span class="avatar-edit">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    </span>
+
+                                                <script>
+                                                    var loadFileNid = async function(event){
+                                                        var reader = new FileReader();
+                                                        reader.onload = function(){
+                                                        var output = document.getElementById('output_nid');
+                                                        output.src = reader.result;
+                                                        };
+                                                        reader.readAsDataURL(event.target.files[0]);
+                                                        const userid = document.getElementById("userid")
+                                                        const nidphoto = document.getElementById("nidphoto")
+                                                        const formData = new FormData();
+                                                        if(nidphoto){
+                                                            try{
+                                                                formData.append("nidphoto", event.target.files[0]);
+                                                                    const response  = await  fetch(`http://localhost:8080/api/shop/updateshopnidphoto/${userid.value}`, {
+                                                                    method: 'PUT',
+                                                                    body: formData  
+                                                                })
+                                                                console.log("response from shop profile",response)
+                                                                    if(response.status === 200){
+                                                                        custom_alert_box.style.display="block"
+                                                                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                                                                        setTimeout(()=>{
+                                                                            custom_alert_box.style.display="none"
+                                                                        }, 5000);
+                                                                    }else{
+                                                                        custom_alert_box.style.display="none"
+                                                                    }
+                                                                }catch(error){
+                                                                console.log("error",error)
+                                                                }
+                        
+                                                            console.log("response for nid upload:",response)
+                                                        }
+                                                    
+                                                    };
+                                                    
+                                                </script>
+                                                </label>
+                                            </div>
+                                              
+                                        </div>
+                                              <div class="form-group col-md-12 text-end">
+                                                 <button type="submit" class="btn btn-secondary"><i class="fa fa-pencil mx-1" aria-hidden="true"></i> Create Product</button>
+                                            </div>
+                                       
+                                    </form>
+                                </div>
+                            </div>
+                    </div>
+
+             </div>
+
+        <script>
+            const myForm = document.getElementById("myForm")
+            const photo = document.getElementById("photo")
+            const name = document.getElementById("name")
+            const price = document.getElementById("price")
+            const stock = document.getElementById("stock")
+            const category = document.getElementById("category")
+            const genericname = document.getElementById("genericname")
+            const company = document.getElementById("company")
+            const strength = document.getElementById("strength")
+            const description = document.getElementById("description")
+            const successmessage = document.getElementById("successmessage")
+            const custom_alert_box = document.getElementById("custom_alert_box")
+            myForm.addEventListener("submit", async(e) => {
+                e.preventDefault();
+                const formData = new FormData();
+                
+                if(photo){
+                    formData.append("photo", photo.files[0]);
+                    formData.append("name", name.value);
+                    formData.append("price", price.value);
+                    formData.append("stock", stock.value);
+                    formData.append("category", category.value);
+                    formData.append("genericname", genericname.value);
+                    formData.append("company", company.value);
+                    formData.append("strength", strength.value);
+                    formData.append("description", description.value);
+                console.log("form data",formData)
+                    try{
+                        const response  = await  fetch(`http://localhost:5000/api/products/addproduct`, {
+                        method: 'POST',
+                        body: formData  
+                    })
+                    console.log("response from shop profile",response)
+                        if(response.status === 200){
+                            custom_alert_box.style.display="block"
+                            window.scrollTo({ top: 0, behavior: 'smooth' })
+                            setTimeout(()=>{
+                                custom_alert_box.style.display="none"
+                            }, 5000);
+                        }else{
+                            custom_alert_box.style.display="none"
+                        }
+                    }catch(error){
+                    console.log("error",error)
+                    }
+                    
+                
+                    }
+                    else{
+                        
+                        formData.append("name", name.value);
+                        formData.append("price", price.value);
+                        formData.append("stock", stock.value);
+                        formData.append("category", category.value);
+                        formData.append("genericname", genericname.value);
+                        formData.append("company", company.value);
+                        formData.append("strength", strength.value);
+                        formData.append("description", description.value);
+                        // Display the values
+                        try{
+                                const response  = await  fetch(`http://localhost:5000/api/products/addproduct`, {
+                                method: 'POST',
+                                body: formData  
+                                })
+                                if(response.status === 200){
+                                    custom_alert_box.style.display="block"
+                                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                                    setTimeout(()=>{
+                                        custom_alert_box.style.display="none"
+                                    }, 5000);
+                                }else{
+                                    custom_alert_box.style.display="none"
+                                }
+                            }catch(error){
+                                console.log("error",error)
+                            }
+                    
+                    }
+                
+            });
+        </script>
+               </div>
+              
+            </div>
+        </div>
+    </div>
+
+   
+
+    {{!-- mini footer --}}
+    <div class="footer_part">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="footer_iner text-center">
+                        <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- footer  --}}
+{{>footer}}
