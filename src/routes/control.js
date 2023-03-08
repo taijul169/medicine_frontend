@@ -40,16 +40,37 @@ const req = require('express/lib/request');
 const authcustomerNormal = require('../middleware/authenticateCustomerNormal');
 
 // ---------------------------------------------------------------------------------medicine start -----------------------------------
-router.get('/', (req,res)=>{
+router.get('/admin/', (req,res)=>{
     try {
-        res.render("admin/index")
+        fetch(`http://localhost:5000/api/products/allproducts`)
+        .then(res => res.json())
+        .then(productlist =>{
+            fetch(`http://localhost:5000/api/order/getallorders`)
+            .then(res => res.json())
+            .then(orderlist =>{
+               
+                fetch(`http://localhost:5000/api/order/getallcustomers`)
+                    .then(res => res.json())
+                    .then(customerlist =>{
+                        let totalSale =0;
+                        orderlist.map((item,idx)=>{
+                            totalSale = totalSale + parseInt(item.total) 
+                            return item
+                        })
+                        console.log("totalsale:",totalSale)
+                        res.render("admin/index",{productlist,userData:req.userData,customerlist,customerlist,totalSale,orderlist})
+                    })
+            })
+            
+        })
+        
     } catch (error) {
         console.log(error)
     }
       
  });
 // create product route
- router.get('/createproduct', (req,res)=>{
+ router.get('/admin/createproduct', (req,res)=>{
     try {
         res.render("admin/createproduct")
     } catch (error) {
@@ -59,7 +80,7 @@ router.get('/', (req,res)=>{
  });
 
 //  product list
- router.get('/productlist', (req,res)=>{
+ router.get('/admin/productlist', (req,res)=>{
     try {
         fetch(`http://localhost:5000/api/products/allproducts`)
         .then(res => res.json())
@@ -72,6 +93,148 @@ router.get('/', (req,res)=>{
     } 
       
  });
+
+
+ 
+ //  get single product
+ router.get('/admin/viewsingleproduct/:id', (req,res)=>{
+    try {
+        fetch(`http://localhost:5000/api/products/singleproduct/${req.params.id}`)
+        .then(res => res.json())
+        .then(singleproduct =>{
+            console.log("singleproduct:",singleproduct)
+            res.render("admin/singleproduct",{singleproduct,userData:req.userData})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+      
+ });
+
+  //  get order list
+  router.get('/admin/allorderlist', (req,res)=>{
+    try {
+        fetch(`http://localhost:5000/api/order/getallorders`)
+        .then(res => res.json())
+        .then(orderlist =>{
+            res.render("admin/orderlist",{orderlist,userData:req.userData})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+      
+ });
+
+   //  new order lsit
+   router.get('/admin/neworderlist', (req,res)=>{
+    try {
+        fetch(`http://localhost:5000/api/order/getallordersbystatus/pending`)
+        .then(res => res.json())
+        .then(orderlist =>{
+            res.render("admin/neworderlist",{orderlist,userData:req.userData})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+      
+ });
+   //  get single order
+   router.get('/admin/viewsingleorder/:id', (req,res)=>{
+    try {
+        let total = 0;
+        fetch(`http://localhost:5000/api/order/order/${req.params.id}`)
+        .then(res => res.json())
+        .then(singleorder =>{
+            singleorder.order.orderitem = singleorder.order.orderitem.map((item,idx)=>{
+                item.subtotal = item.price * item.quantity
+                total = total + item.subtotal
+                return item
+            })
+            res.render("admin/singleorder",{singleorder,userData:req.userData,total})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+      
+ });
+
+//  order status update
+  router.get('/admin/updateorderstatus/:status/:id', async(req,res)=>{
+    try {
+        const response =  await (fetch(`http://localhost:5000/api/order/orderstatusupdate/${req.params.status}/${req.params.id}`, 
+    { 
+        method: 'PUT', 
+        body: JSON.stringify(req.body),
+        headers: { 'Content-Type': 'application/json' }
+    }));
+    if(response.status === 200){
+        req.session.message={
+            type:'alert-success',
+            intro:'Created!',
+            message:'Data Updated'
+        }
+        res.redirect(`/admin/viewsingleorder/${req.params.id}`)
+    } 
+    console.log("response",response)  
+    } catch (error) {
+        console.log(error);
+    } 
+      
+ });
+
+
+ 
+//    all clients
+   router.get('/admin/clientlist', (req,res)=>{
+    try {
+        fetch(`http://localhost:5000/api/order/getallcustomers`)
+        .then(res => res.json())
+        .then(clientlist =>{
+            res.render("admin/clientlist",{clientlist,userData:req.userData})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+      
+ });
+
+//  single client
+router.get('/admin/viewsingleclient/:id', (req,res)=>{
+    try {
+        fetch(`http://localhost:5000/api/order/getsinglecustomerorderhistory/${req.params.id}`)
+        .then(res => res.json())
+        .then(clientData =>{
+            res.render("admin/singleclient",{clientData,userData:req.userData})
+        })
+    } catch (error) {
+        console.log(error);
+    }   
+ });
+
+//  find best client
+router.get('/admin/findbestclient', (req,res)=>{
+    try {
+        res.render("admin/findbestclients",{userData:req.userData})
+    } catch (error) {
+        console.log(error);
+    }   
+ });
+
+
+ router.post('/admin/bestcustomer', (req,res)=>{
+    try {
+        
+        axios.post("http://localhost:5000/api/order/findbestclient",req.body)
+           .then(response =>{
+               res.render("admin/findbestclients",{CustomerData:response.data,userData:req.userData,bodyData:req.body})
+           })
+           .catch(err => console.log(err))
+    } catch (error) {
+       console.log("error",error)
+    }
+});
+
+
 //--------------------------------------------------------------------------------- medicine end--------------------------------------- 
 
 

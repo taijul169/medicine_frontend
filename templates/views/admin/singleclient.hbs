@@ -1,0 +1,206 @@
+{{>header}}
+{{!-- sidenav --}}
+ {{>nav}}
+
+<section class="main_content dashboard_part">
+
+    <div class="container-fluid g-0">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                {{!-- header common --}}
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                        <div class="search_inner">
+                            <form action="#">
+                                <div class="search_field">
+                                    <input type="text" placeholder="Search here...">
+                                </div>
+                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/client_img.png" alt="#">
+                            <div class="profile_info_iner">
+                                <p>Welcome Admin!</p>
+                                <h5>Travor James</h5>
+                                <div class="profile_info_details">
+                                    <a href="#">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>
+                                    <a href="#">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               {{!-- .common-inner-content  --}}
+               <div class="common-inner-content p-5">
+                    <div class="col-sm-12">
+                     <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col d-flex justify-content-between">
+                                <h5 class="card-title">Single Customer</h5>
+                                  
+                            </div>
+                            <div class="col-auto custom-list d-flex">
+                                <div class="form-custom me-2">
+                                    <div id="tableSearch" class="dataTables_wrapper">
+                                    </div>
+                                </div>
+                                <div class="multipleSelection">
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="feather-filter me-1"></i> Filter </p>
+                                        <span class="down-icon"><i class="feather-chevron-down"></i></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                       <div class="row ">
+                           <style>
+                               ul.single-order-wrapper-summ{
+                                   margin: 0;
+                                   padding: 0;
+                               }
+                               ul.single-order-wrapper-summ li {
+                                    border: 1px solid #f4f4f4;
+                                    padding: 5px;
+                                    display: flex;
+                                    justify-content: space-between;
+                                }
+                           </style>
+                           {{!-- sideview --}}
+                           <div class="col-md-4">
+                               <div class="card">
+                                   <div class="card-header">
+                                      <img style="width: 200px;height:100%" src="{{clientData.image}}" class="img-fluid rounded-start" alt="..." onerror="this.onerror=null; this.src='/img/default.jpg'">
+                                   </div>
+                                   <div class="card-body">
+                                       <h5>{{clientData.firstname}} {{clientData.lastname}}</h5>
+                                       <address>{{clientData.address}}</address>
+                                       <span class="d-block">{{clientData.phone}}</span>
+                                       <span class="d-block my-1">{{clientData.email}}</span>
+                                       <span>From:{{clientData.createdAt}}</span>
+                                   </div>
+                                   <div class="card-footer">
+                                       <a href="#" class="btn btn-outline-info">Message</a>
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="col-md-8">
+                               <div class="customer-profile-nav-wrapper m-2">
+                                    <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Orders</button>
+                                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Review</button>
+                                        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Message</button>
+                                    </div>
+                                    </nav>
+                                    <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                               <ul class="single-order-wrapper-summ">
+                                                   <li><span>ID:#</span>Created At <span>Current Status</span> <span>Action</span></li>
+                                                   {{#each clientData.order}}
+                                                     <li><span>#{{this.id}}</span>{{this.createdAt}} <span>{{statusDisplay this.status}}</span> <a href="/admin/viewsingleorder/{{this.id}}" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                                   {{/each}}
+                                               </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                        <div class="review-wrapper-customer">
+                                           {{#each clientData.review }}
+                                            {{!-- single review --}}
+                                            <div class="card">
+                                                <style>
+                                                    .fas.fa-star.filled{
+                                                        color: orange;
+                                                    }
+                                                </style>
+                                                <div class="card-header">
+                                                   {{reviewShow this.rating}}
+                                                </div>
+                                                <div class="card-body">
+                                                   <p>{{this.description}}</p>
+                                                   
+                                                    CreatedAt: {{this.createdAt}}
+                                              
+                                                </div>
+                                               
+                                            </div>
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                        <div class="messaging-box-wrapper">
+                                            <ul style="height: 500px; overflow-y: scroll;" class="border" id="msgbox_ul">
+                                                {{#each messageData}}
+                                                   {{ChatBoxMessageDisplay this}}
+                                                
+                                                 {{/each}}
+                                            </ul>
+                                            <form  class="msg-input-box text-end my-2" id="myForm">
+                                                <textarea name="message" id="message" cols="10" class="form-control" rows="2" required placeholder="Write your message"></textarea>
+                                                <input type="hidden" value="{{userData.id}}" name="shop_id" id="shop_id">
+                                                <input type="hidden" value="{{clientData.id}}" name="customer_id" id="customer_id">
+                                                <button type="submit" class="btn btn-primary m-2" disabled>Send Message</button>
+                                            </form>
+                                           
+                                        </div>
+                                    </div>
+                                    </div>
+                               </div>
+                              
+                           </div>
+
+                       </div>
+                    </div>
+                   
+                     </div>
+                    </div>
+
+             </div>
+
+               </div>
+              
+            </div>
+        </div>
+    </div>
+
+   
+
+    {{!-- mini footer --}}
+    <div class="footer_part">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="footer_iner text-center">
+                        <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- footer  --}}
+{{>footer}}
+
+  

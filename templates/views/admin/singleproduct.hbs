@@ -18,7 +18,7 @@
                                 <div class="search_field">
                                     <input type="text" placeholder="Search here...">
                                 </div>
-                                <button type="submit"> <img src="/img/icon/icon_search.svg" alt=""> </button>
+                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
                             </form>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h5 class="card-title"> Create Product<span
+                                    <h5 class="card-title"> Single Product<span
                                             class="badge badge-pill badge-danger pl-4"></span></h5>
                                 </div>
                             </div>
@@ -61,36 +61,24 @@
                            
                                     <form class="p-5" id="myForm">
                                         <div class="row">
+                                            <input type="hidden" value="{{singleproduct.id}}" id="productid">
                                            <div class="col-md-12">
                                                <div class="alert  alert-dismissible fade show alert_custom  alert-success" role="alert" id="custom_alert_box" style="display: none;">
-                                                <strong>Success</strong> New Product has been created.
+                                                <strong>Success</strong> Produc has been updated.
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                              </div>
                                            </div>
-                                         
-                                            <div class="form-group col-md-4">
-                                                <label for="inputEmail4">Name</label>
-                                                <input type="text" class="form-control" id="name" value="{{userData.name}}" required name="name">
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="inputAddress">Price</label>
-                                                <input type="number" class="form-control" id="price" value="{{userData.phone}}"  required name="price" >
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="inputAddress">Stock</label>
-                                                <input type="number" class="form-control" id="stock" value="{{userData.phone}}"  required name="stock" >
-                                            </div> 
-                                            {{!-- active deactive controller --}}
-                                            <div class="form-group col-md-4 align-items-end text-right d-none" style="text-align: right;">
-                                                <span class="d-block">Go Online/Offline</span>
+                                                     {{!-- active deactive controller --}}
+                                            <div class="form-group col-md-12 align-items-end text-right " style="text-align: right;">
+                                                <span class="d-block">Make active/deactivated</span>
                                                 
                                             
                                                 <label class="switch">
                                                     
-                                                {{#if userData.isonline}}
+                                                {{#if singleproduct.published}}
                                                     <input type="checkbox" checked onclick=" return OnlineOfflineController(0)">
                                                 {{/if}}
-                                                {{#unless userData.isonline}}
+                                                {{#unless singleproduct.published}}
                                                     <input type="checkbox" onclick="return OnlineOfflineController(1)">
                                                 {{/unless}}
                                                 <span class="slider"></span>
@@ -98,12 +86,9 @@
 
                                                 <script>
                                                     const OnlineOfflineController = async(status)=>{
-                                                        if(status){
-                                                            window.alert("are you sure to activate your shop?")
-                                                        }else{
-                                                            window.alert("are you sure to deactivated your shop?")
-                                                        }
-                                                        const response  = await  fetch(`http://localhost:8080/api/shop/shopstatusupdatebyshop/${userid.value}/${status}`, {
+                                                       const productid = document.getElementById("productid")
+                                                       
+                                                        const response  = await  fetch(`http://localhost:5000/api/products/updateproductstatus/${productid.value}/${status}`, {
                                                                 method: 'PUT', 
                                                             })
                                                         location.reload();  
@@ -122,6 +107,11 @@
                                                     opacity: 0;
                                                     width: 0;
                                                     height: 0;
+                                                    }
+                                                    .switch::after {
+                                                       
+                                                        opacity: 0;
+                                                       
                                                     }
 
                                                     .slider {
@@ -163,6 +153,19 @@
                                                     }
 
                                             </style>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputEmail4">Name</label>
+                                                <input type="text" class="form-control" id="name" value="{{singleproduct.name}}" required name="name">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputAddress">Price</label>
+                                                <input type="number" class="form-control" id="price" value="{{singleproduct.price}}"  required name="price" >
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputAddress">Stock</label>
+                                                <input type="number" class="form-control" id="stock" value="{{singleproduct.stock}}"  required name="stock" >
+                                            </div> 
+                                    
                                           
                                         </div>
                                         
@@ -177,31 +180,30 @@
                                             
                                             <div class="form-group col-md-4">
                                                 <label for="inputZip">Genericname</label>
-                                                <input type="text" class="form-control" id="genericname" value="{{userData.genericname}}"  required name="genericname" >
+                                                <input type="text" class="form-control" id="genericname" value="{{singleproduct.genericname}}"  required name="genericname" >
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="inputZip">Company Name</label>
-                                                <input type="text" class="form-control" id="company"value="{{userData.company}}"   required name="company" >
+                                                <input type="text" class="form-control" id="company"value="{{singleproduct.company}}"   required name="company" >
                                             </div>
                                               <div class="form-group col-md-4">
                                                 <label for="inputZip">Strength</label>
-                                                <input type="number" class="form-control" id="strength"value="{{userData.strength}}"   required name="strength" >
+                                                <input type="text" class="form-control" id="strength"value="{{singleproduct.strength}}"   required name="strength" >
                                             </div>
                                             
                                             <div class="form-group col-md-8">
                                                 <label for="inputAddress2">Description</label>
-                                                <textarea name="description" id="description" cols="2" rows="2" class="form-control"></textarea>
+                                                <textarea name="description" id="description"  cols="2" rows="2" class="form-control">{{singleproduct.description}}</textarea>
                                             </div>
                                             <div class="form-group col-md-12">
                                                 <label for="inputAddress2">Product Photo</label>
-                                                <input type="file" id="image" class="form-control" name="image" onchange="loadFileNid(event)" required>
-                                                <label class="avatar profile-cover-avatar" for="avatar_upload" >
-                                                    
-                                                    <img class="avatar-img" src="{{userData.nidphoto}}" style="width: 250px;"  id="output_nid" alt="Profile Image" onerror="this.onerror=null; this.src='/assets_old/img/default.jpg'">
-                                                    
-                                                    <span class="avatar-edit">
-                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                                                    </span>
+                                                <input type="file" id="image" class="form-control" name="image" onchange="loadFileNid(event)" >
+                                                <label class="avatar profile-cover-avatar" for="avatar_upload" >  
+                                                <img class="avatar-img" src="{{singleproduct.image}}" style="width: 250px;"  id="output_nid" alt="Profile Image" onerror="this.onerror=null; this.src='/assets_old/img/default.jpg'">
+                                                
+                                                <span class="avatar-edit">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                </span>
 
                                                 <script>
                                                     var loadFileNid = async function(event){
@@ -215,8 +217,7 @@
                                                     
                                                 </script>
                                                 </label>
-                                            </div>
-                                              
+                                            </div>    
                                         </div>
                                              <div class="form-group col-md-12 text-end">
                                                  <button type="submit" class="btn btn-secondary"><i class="fa fa-pencil mx-1" aria-hidden="true"></i> Create Product</button>
@@ -231,6 +232,7 @@
         <script>
             const myForm = document.getElementById("myForm")
             const image = document.getElementById("image")
+            const productid = document.getElementById("productid")
             const name = document.getElementById("name")
             const price = document.getElementById("price")
             const stock = document.getElementById("stock")
@@ -256,17 +258,16 @@
                     formData.append("description", description.value);
                 console.log("form data",formData)
                     try{
-                        const response  = await  fetch(`http://localhost:5000/api/products/addproduct`, {
-                        method: 'POST',
+                        const response  = await  fetch(`http://localhost:5000/api/products/updateproduct/${productid.value}`, {
+                        method: 'PUT',
                         body: formData  
                     })
                     console.log("response from shop profile",response)
-                        if(response.status === 201){
+                        if(response.status === 200){
                             custom_alert_box.style.display="block"
                             window.scrollTo({ top: 0, behavior: 'smooth' })
                             setTimeout(()=>{
                                 custom_alert_box.style.display="none"
-                                window.location.href = `${window.location.origin}/productlist`;
 
                             }, 3000);
                         }else{
@@ -290,11 +291,11 @@
                         formData.append("description", description.value);
                         // Display the values
                         try{
-                                const response  = await  fetch(`http://localhost:5000/api/products/addproduct`, {
-                                method: 'POST',
+                                const response  = await  fetch(`http://localhost:5000/api/products/updateproduct/${productid.value}`, {
+                                method: 'PUT',
                                 body: formData  
                                 })
-                                if(response.status === 201){
+                                if(response.status === 200){
                                     custom_alert_box.style.display="block"
                                     window.scrollTo({ top: 0, behavior: 'smooth' })
                                     setTimeout(()=>{

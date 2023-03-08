@@ -1,0 +1,226 @@
+{{>header}}
+{{!-- sidenav --}}
+ {{>nav}}
+
+<section class="main_content dashboard_part">
+
+    <div class="container-fluid g-0">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+                {{!-- header common --}}
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                        <div class="search_inner">
+                            <form action="#">
+                                <div class="search_field">
+                                    <input type="text" placeholder="Search here...">
+                                </div>
+                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/client_img.png" alt="#">
+                            <div class="profile_info_iner">
+                                <p>Welcome Admin!</p>
+                                <h5>Travor James</h5>
+                                <div class="profile_info_details">
+                                    <a href="#">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>
+                                    <a href="#">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               {{!-- .common-inner-content  --}}
+               <div class="common-inner-content p-5">
+                    <div class="col-md-12">
+
+                       {{!-- find form --}}
+                       <div class="card">
+                            <div class="card-header bg-primary-light"><h4>Find Best Customer by date</h4></div>
+                            <div class="card-body">
+                                <form action="/admin/bestcustomer" method="POST">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label for="area">Select Order</label>
+                                            <select name="by_order"  class="form-control form-select" required>
+                                                <option value="{{bodyData.by_order}}" >{{bodyData.by_order}}</option>
+                                                <option value="total_amount" >By Total Amount</option>
+                                                <option value="count" >By No. of Order</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="area">Start Date</label>
+                                            <input type="date" name="fromDate" class="form-control" value="{{bodyData.fromDate}}">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="area">End Date</label>
+                                            <input type="date" name="toDate" class="form-control" value="{{bodyData.toDate}}">
+                                        
+                                        </div>
+                                    
+                                        <div class="form-group col-md-4">
+                                            <label for="area">Select Current Status</label>
+                                            <select name="status"  class="form-control form-select">
+                                                <option value="{{bodyData.status}}">{{bodyData.status}}</option>
+                                                <option value="Pending" >Pending</option>
+                                                <option value="Delivered" >Delivered</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="area">Set Limit <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="limit" value="{{bodyData.limit}}" required>
+                                        </div>
+                                        <div class="form-group col-md-4 d-flex">
+                                            <input type="submit" value="Serach" class="btn btn-primary m-4">
+                                            <input type="reset" value="Reset" class="btn btn-secondary m-4">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {{!-- datatable --}}
+                     <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title">Clients</h5>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="table-responsive">
+                            <div id="data-table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6"></div>
+                                    <div class="col-sm-12 col-md-6"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="datatable table table-bordered hover-table dataTable no-footer"
+                                            id="data-table" role="grid">
+                                          
+                                            <thead class="thead-light">
+                                                 
+
+                                                <tr role="row">
+                                                    <th class="sorting_asc" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="ID: activate to sort column descending"
+                                                        style="width: 95.5938px;">ID</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Patient: activate to sort column ascending"
+                                                        style="">Name</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Last Visit: activate to sort column ascending"
+                                                        style="">Phone</th>
+
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Total Income: activate to sort column ascending"
+                                                        style="width: 208px;">Address</th>
+
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Blood group: activate to sort column ascending"
+                                                        style="">No. of Orders</th>
+                                                     <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Blood group: activate to sort column ascending"
+                                                        style="">Total Profit</th>    
+                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Account Status: activate to sort column ascending"
+                                                        style="width: 232.938px;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each CustomerData}}
+                                                {{!-- single patient --}}
+                                                <tr role="row" class="odd">
+                                                    <td class="sorting_1">#{{this.user.id}}</td>
+                                                    <td>
+                                                        <h4 class="table-avatar">
+                                                            <span class="user-name">{{this.user.firstname}}</span>
+                                                        </h4>
+                                                    </td>
+                                                    <td><span class="user-name">{{this.user.phone}} </span><span
+                                                            class="d-block"></span></td>
+
+                                                    <td>{{this.user.address}}</td>
+
+
+
+                                                    <td> {{ this.count }}</td>
+                                                    <td> {{ this.total_amount }}</td>
+                                                    <td class="d-flex justify-content-around"><a
+                                                            href="/admin/viewsingleclient/{{this.user.id}}"
+                                                            class="btn btn-secondary ">View</a>
+                                                </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                     </div>
+                    </div>
+             </div>
+
+               </div>
+              
+            </div>
+        </div>
+    </div>
+
+   
+
+    {{!-- mini footer --}}
+    <div class="footer_part">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="footer_iner text-center">
+                        <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- footer  --}}
+{{>footer}}
+
+   <script>
+        $(document).ready(function() {
+        $('#data-table').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            order: [[3, 'desc']],
+            } );
+        } );
+    </script>

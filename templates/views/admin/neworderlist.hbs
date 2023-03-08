@@ -52,21 +52,9 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h5 class="card-title">Products</h5>
+                                <h5 class="card-title">Pending Orders</h5>
                             </div>
-                            <div class="col-auto custom-list d-flex">
-                                <div class="form-custom me-2">
-                                    <div id="tableSearch" class="dataTables_wrapper">
-                                    </div>
-                                </div>
-                                <div class="multipleSelection">
-                                    <div class="selectBox">
-                                        <p class="mb-0"><i class="feather-filter me-1"></i> Filter </p>
-                                        <span class="down-icon"><i class="feather-chevron-down"></i></span>
-                                    </div>
-                                   
-                                </div>
-                            </div>
+                           
                         </div>
                     </div>
                     <div class="card-body p-5">
@@ -75,53 +63,33 @@
                                
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="datatable table table-bordered hover-table dataTable "
+                                        <table class="datatable table table-bordered hover-table dataTable"
                                             id="data-table" role="grid">
-                                            <thead class="thead-light">
+                                            <thead >
 
-                                                <tr role="row">
-                                                    <th class="sorting_asc" tabindex="0" aria-controls="data-table"
-                                                        rowspan="1" colspan="1" aria-sort="ascending"
-                                                        aria-label="ID: activate to sort column descending"
-                                                        >ID</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Patient: activate to sort column ascending"
-                                                        style="width: 398.25px;">Name</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Last Visit: activate to sort column ascending"
-                                                        >Price</th>
-                                                     
-                                                    <th class="sorting" tabindex="0" aria-controls="data-table"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Blood group: activate to sort column ascending"
-                                                        >Category</th>
+                                                <tr role="row ">
+                                                    <th>ID</th>
+                                                    <th>CreateAt</th>
+                                                    <th>Total</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {{#each productlist}}
+                                                {{#each orderlist}}
                                                {{!-- single patient --}}
                                                 <tr role="row" class="odd">
-                                                    <td class="sorting_1">#{{this.id}}</td>
+                                                    <td class="">#{{this.id}}</td>
                                                     <td>
-                                                       <span class="user-name" style="color: black;font-weight:bold">{{this.name}}</span>
+                                                       <span class="user-name" style="color: black;font-weight:bold">{{this.createdAt}}</span>
                                                     </td>
-                                                    <td><span class="user-name">{{this.price}} </span><span
+                                                    <td><span class="user-name">{{this.total}} </span><span
                                                             class="d-block"></span></td>
                                                    
-                                                    <td>{{this.category}}</td>
+                                                    <td>{{statusDisplay this.status}}</td>
                                                    
-                                                    <td>
-
-                                                        {{ activedeactiveControlAdmin this.id  this.published  ../userData.id}}
-                                                       
-                                                    </td>
                                                     <td class="d-flex ">
-                                                        <a href="/admin/viewsingleproduct/{{this.id}}"  class="btn btn-success m-1"><span class="user-name">View</span> <span class="text-muted"></span></a>
-                                                        <a href="/admin/delete/singleproductupdate/{{this.id}}" onclick="return confirm('Are you sure to delete this item?')" class="btn btn-danger m-1"><span class="user-name">Delete</span> <span class="text-muted"></span></a>
+                                                        <a href="/admin/viewsingleorder/{{this.id}}"  class="btn btn-success m-1"><span class="user-name">View</span> <span class="text-muted"></span></a>
                                                     </td>
                                                 </tr>
                                                {{/each}}
@@ -171,7 +139,8 @@
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
+            ],
+             order: [[3, 'desc']],
             } );
         } );
     </script>

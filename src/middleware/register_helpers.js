@@ -302,12 +302,12 @@ hbs.registerHelper("shopblockunblock",(status)=>{
 hbs.registerHelper("statusDisplay",(status)=>{
   
   if(status == 'Received'){
-    return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-sm bg-default-light">
+    return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-sm bg-default-light ">
     <i class="fas fa-check"></i> ${status}
     </a>`)
   }
   else if(status == 'Delivered'){
-    return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+    return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-success btn-sm">
     <i class="fas fa-check"></i> ${status}
     </a> `)
   }
@@ -322,7 +322,7 @@ hbs.registerHelper("statusDisplay",(status)=>{
     </a> `)
   }
   else{
-    return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-sm bg-warning-light">
+    return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-info btn-sm">
     <i class="far fa-eye"></i> Pending
     </a>`)
   }

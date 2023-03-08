@@ -1,0 +1,166 @@
+{{>header}}
+{{!-- sidenav --}}
+ {{>nav}}
+
+<section class="main_content dashboard_part">
+
+    <div class="container-fluid g-0">
+        <div class="row">
+           
+            <div class="col-lg-12 p-0">
+                {{!-- header common --}}
+                <div class="header_iner d-flex justify-content-between align-items-center">
+                    <div class="sidebar_icon d-lg-none">
+                        <i class="ti-menu"></i>
+                    </div>
+                    <div class="serach_field-area">
+                        <div class="search_inner">
+                            <form action="#">
+                                <div class="search_field">
+                                    <input type="text" placeholder="Search here...">
+                                </div>
+                                <button type="submit"> <img src="img/icon/icon_search.svg" alt=""> </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="header_right d-flex justify-content-between align-items-center">
+                        <div class="header_notification_warp d-flex align-items-center">
+                            <li>
+                                <a href="#"> <img src="img/icon/bell.svg" alt=""> </a>
+                            </li>
+                            <li>
+                                <a href="#"> <img src="img/icon/msg.svg" alt=""> </a>
+                            </li>
+                        </div>
+                        <div class="profile_info">
+                            <img src="img/client_img.png" alt="#">
+                            <div class="profile_info_iner">
+                                <p>Welcome Admin!</p>
+                                <h5>Travor James</h5>
+                                <div class="profile_info_details">
+                                    <a href="#">My Profile <i class="ti-user"></i></a>
+                                    <a href="#">Settings <i class="ti-settings"></i></a>
+                                    <a href="#">Log Out <i class="ti-shift-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               {{!-- .common-inner-content  --}}
+               <div class="common-inner-content p-5">
+                <div class="col-sm-12">
+                        <div class="card">
+                            {{#if message}}
+                               <div class="alert  alert-dismissible fade show alert_custom  alert-success mb-1" role="alert" id="custom_alert_box">
+                                  <strong>Success</strong> Order status updated.
+                                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                              </div>
+                            {{/if}}
+                           
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col d-flex justify-content-between">
+                                        <h5 class="card-title">Order Invoice<span
+                                                class="badge badge-pill badge-danger pl-4"></span></h5> <h4><span class="badge bg-info text-dark">{{singleorder.order.status}}</span></h4>
+                                               
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="ms-panel p-3">
+                                    <div class="ms-panel-header header-mini">
+                                    <div class="d-flex justify-content-between">
+                                        <h6>Invoice</h6>
+                                        <h6>#000{{singleorder.order.id}}</h6>
+                                    </div>
+                                    </div>
+                                    <div class="ms-panel-body ">
+
+                                    <!-- Invoice To -->
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                        <div class="invoice-address">
+                                            <h3>Customer: </h3>
+                                            <h5>{{singleorder.order.shippingaddress.name}}</h5>
+                                            <p>{{singleorder.order.shippingaddress.phone}}</p>
+                                            <p class="mb-0">{{singleorder.order.shippingaddress.address}}</p>
+                                            <p class="mb-0">{{singleorder.order.shippingaddress.area}}</p>
+                                            <p>{{singleorder.order.shippingaddress.city}}</p>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-6 text-md-right">
+                                        <ul class="invoice-date">
+                                            <li>Invoice Date : {{singleorder.order.createdAt}}</li>
+                                           
+                                        </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Invoice Table -->
+                                    <div class="ms-invoice-table table-responsive mt-5">
+                                        <table class="table table-hover text-right thead-primary">
+                                        <thead>
+                                            <tr class="text-capitalize">
+                                            <th class="text-center w-5">id</th>
+                                            <th class="text-left">Name</th>
+                                            <th>qty</th>
+                                            <th>Unit Cost</th>
+                                            <th>total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each singleorder.order.orderitem}}
+                                            <tr>
+                                                <td class="text-center">{{this.id}}</td>
+                                                <td class="text-left">{{this.name}}</td>
+                                                <td>{{this.quantity}}</td>
+                                                <td>৳{{this.price}}</td>
+                                                <td>৳{{this.subtotal}}</td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                            <td colspan="4">Total Cost: </td>
+                                            <td>৳{{total}}</td>
+                                            </tr>
+                                        </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="invoice-buttons text-right">
+                                        <a href="#" class="btn btn-primary mr-2">Print Invoice</a>
+                                        <a href="/admin/updateorderstatus/Delivered/{{singleorder.order.id}}" class="btn btn-secondary">Make It Delivered</a>
+                                    </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+
+     
+               </div>
+              
+            </div>
+        </div>
+    </div>
+
+   
+
+    {{!-- mini footer --}}
+    <div class="footer_part">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="footer_iner text-center">
+                        <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- footer  --}}
+{{>footer}}
