@@ -1,0 +1,104 @@
+{{>header}}
+
+
+
+   
+    <section class="main_content dashboard_part">
+
+     
+
+        <div class="main_content_iner ">
+            <div class="container-fluid plr_30 body_white_bg pt_30">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="white_box mb_30">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-6">
+
+                                    <div class="modal-content cs_modal">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Log in</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="Custom_alert_customer" style="display: none;">
+                                                <strong>Faild!!</strong> {{msg}}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                            <form id="" method="post" action="/admin/login">
+                                                <div class="">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter your email" name="email" value="{{bodyData.email}}" id="email">
+                                                </div>
+                                                <div class="">
+                                                    <input type="password" name="password" value="value="{{bodyData.password}}"" class="form-control" id="password" placeholder="Password">
+                                                </div>
+                                                <div class="">
+                                                    <button type="submit" class="btn btn-info w-100">Login</button>
+                                                    
+                                                </div>
+                                                <p>Need an account? <a data-bs-toggle="modal" data-bs-target="#sing_up"
+                                                        data-bs-dismiss="modal" href="#"> Sign Up</a></p>
+                                                <div class="text-center">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#forgot_password"
+                                                        data-bs-dismiss="modal" class="pass_forget_btn">Forgot
+                                                        Password?</a>
+                                                </div>
+                                            </form>
+                                            <script>
+                                                    const myForm = document.getElementById("myForm")
+                                                    const email = document.getElementById("email")
+                                                    const password = document.getElementById("password")
+                                                    const custom_alert_box = document.getElementById("Custom_alert_customer")
+                                                    myForm.addEventListener("submit", async(e)=> {
+                                                        
+                                                        e.preventDefault();
+                                                        const formData = new FormData();
+                                                        formData.append("email", email.value);
+                                                        formData.append("password", password.value);
+                                                        console.log("formdata",formData)
+                                                            try {
+                                                            const response = await fetch(`http://localhost:5000/api/admin/login`,{
+                                                                    method: 'POST',
+                                                                    body: formData
+                                                                })
+                                                                console.log("response:",response)
+                                                                if(response.status == 200){
+                                                                    document.getElementById("custom_alert_box").style.display="block"
+                                                                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                                                                    setTimeout(()=>{
+                                                                        document.getElementById("custom_alert_box").style.display="none"
+                                                                    }, 5000);
+                                                                }else{
+                                                                    document.getElementById("custom_alert_box").style.display="none"
+                                                                }
+                                                                
+                                                            }
+                                                            catch(err) {
+                                                              console.log('err',err)
+                                                            
+                                                            }   
+                                                    });
+                                                </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer_part">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="footer_iner text-center">
+                                <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+{{>footer}}

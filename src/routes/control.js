@@ -234,7 +234,35 @@ router.get('/admin/findbestclient', (req,res)=>{
     }
 });
 
+// admin login
+router.get('/admin/login', (req,res)=>{
+    try {
+        res.render('admin/login')
+    } catch (error) {
+       console.log("error",error)
+    }
+});
 
+
+// admin login post
+router.post('/admin/login', (req,res)=>{
+    try {
+        
+        axios.post("http://localhost:5000/api/admin/login",req.body)
+           .then(response =>{
+               console.log("response for login",response)
+               if(response.status === 200){
+                res.render("admin/index",{loginData:response.data,bodyData:req.body})
+               }  
+           })
+           .catch(err =>{
+            res.render("admin/login",{bodyData:req.body,msg:'Invalid Credentials'})
+           })
+    } catch (error) {
+     res.render("admin/login",{bodyData:req.body,msg:'Invalid Credentials'})
+       console.log("error",error)
+    }
+});
 //--------------------------------------------------------------------------------- medicine end--------------------------------------- 
 
 
