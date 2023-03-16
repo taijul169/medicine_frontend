@@ -1,0 +1,365 @@
+{{>header}}
+{{!-- sidenav --}}
+ {{>nav}}
+ <style>
+      .table-wrap {
+            overflow-x: auto;
+        }
+
+       .table-wrap::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .table-wrap::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background-image: linear-gradient(to right, #5D7ECD, #0C91E6);
+        }
+
+
+        .table>:not(caption)>*>* {
+            padding: 2rem 0.5rem;
+        }
+
+        .table tbody td input[type="checkbox"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: #eee;
+            position: relative;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .table tbody td input[type="checkbox"]:after {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 600;
+            content: "\f00c";
+            color: #fff;
+            font-size: 15px;
+            display: none;
+        }
+
+        .table tbody td input[type="checkbox"]:checked,
+        .table tbody td input[type="checkbox"]:checked:hover {
+            background-color: #40bfc1;
+        }
+
+        .table tbody td input[type="checkbox"]:checked::after {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .table tbody td input[type="checkbox"]:hover {
+            background-color: #ddd;
+        }
+
+        .table tbody td .img-container {
+            width: 50px;
+            height: 50px;
+        }
+
+        .table tbody td .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .table tbody,
+        .table thead {
+            background-color: #fff;
+        }
+
+        .table tbody tr td:nth-of-type(1) {
+            text-align: center;
+            min-width: 70px;
+            max-width: 70px;
+        }
+
+        .table tbody tr td:nth-of-type(2) {
+            min-width: 300px;
+            max-width: 300px;
+        }
+
+
+        .table tbody tr td:nth-of-type(3) {
+            min-width: 150px;
+            max-width: 150px;
+        }
+
+        .table tbody tr td:nth-of-type(4) {
+            min-width: 300px;
+            max-width: 300px;
+        }
+
+        .table tbody tr td:nth-of-type(5) {
+            min-width: 50px;
+            max-width: 50px;
+        }
+
+        .table tbody tr {
+            box-shadow: 0px 2px 3px #1f1f1f1a;
+        }
+
+        .table thead tr {
+            border-bottom: 4px solid #E1F5FE;
+        }
+
+        .table tbody td .active,
+        .table tbody td .waiting {
+            background-color: #B9F6CA;
+            color: #388E3C;
+            font-weight: 600;
+            padding: 1px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .table tbody td .waiting {
+            background-color: #FFECB3;
+            color: #FFA000;
+        }
+
+        .table tbody td .active .circle,
+        .table tbody td .waiting .circle {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #388E3C;
+        }
+
+        .table tbody td .waiting .circle {
+            background-color: #FFA000;
+        }
+
+        .table tbody td .fa-times {
+            color: #D32F2F;
+            font-size: 0.9rem;
+        }
+
+        .fw-600 {
+            font-weight: 600 !important;
+        }
+
+        .fs-09 {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .text-grey {
+            color: #a8a8a8 !important;
+        }
+
+
+        @media(min-width: 992px) {
+            .container .table-wrap {
+                overflow: hidden;
+            }
+        }
+ </style>
+<section class="main_content dashboard_part">
+     {{commonheaderadmin userData}}
+    {{!-- .common-inner-content  --}}
+               <div class="common-inner-content p-5">
+                    <div class="col-sm-12">
+                         {{#if message}}
+                            
+                            <div class="alert {{message.type}} alert-dismissible fade show" role="alert">
+                                <strong>{{message.message}}</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {{/if}}
+                     <div class="card">
+                      <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col d-flex justify-content-between">
+                                <h5 class="card-title">Single Offer</h5>
+                                  
+                            </div>
+                            <div class="col-auto custom-list d-flex">
+                                <div class="form-custom me-2">
+                                    <div id="tableSearch" class="dataTables_wrapper">
+                                    </div>
+                                </div>
+                                <div class="multipleSelection">
+                                    {{!-- modal for add new item to offer --}}
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                       Add New Item 
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <form action="/admin/additemtooffer" method="post">
+                                                <input type="hidden" name="discount_id" value="{{discount.id}}">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Product list</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="table-wrap">
+                                                        <table class="table table-borderless table-responsive" id="data-table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th  class="text-muted fw-600">Name</th>
+                                                                    <th class="text-muted fw-600">Price</th>
+                                                                    <th class="text-muted fw-600">Category</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {{#each productlistAll}}
+                                                                {{!-- single product --}}
+                                                                <tr class="align-middle alert" role="alert">
+                                                                    <td>
+                                                                        <input type="checkbox" name="product_id[]" value="{{this.id}}" id="check">
+                                                                        
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="img-container">
+                                                                                {{this.name}}
+                                                                            </div>
+                                                                            <div class="ps-3">
+                                                                                <div class="fw-600 pb-1">{{this.genericname}}</div>
+                                                                                <p class="m-0 text-grey fs-09">{{this.company}}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="fw-600">৳ {{this.price}}</div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-inline-flex align-items-center active">
+                                                                            <div class="circle"></div>
+                                                                            <div class="ps-2">{{this.category}}</div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="btn p-0" data-bs-dismiss="alert">
+                                                                            <span class="fas fa-times"></span>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                               {{/each}}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-info">Add</button>
+                                                </div>
+                                              </form>  
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                       <div class="row ">
+                           <style>
+                               ul.single-order-wrapper-summ{
+                                   margin: 0;
+                                   padding: 0;
+                               }
+                               ul.single-order-wrapper-summ li {
+                                    border: 1px solid #f4f4f4;
+                                    padding: 5px;
+                                    display: flex;
+                                    justify-content: space-between;
+                                }
+                           </style>
+                           {{!-- sideview --}}
+                           <div class="col-md-4">
+                               <div class="card">
+                                   <div class="card-header">
+                                      <img style="width: 200px;height:100%" src="{{clientData.image}}" class="img-fluid rounded-start" alt="..." onerror="this.onerror=null; this.src='/img/default.jpg'">
+                                   </div>
+                                   <div class="card-body">
+                                       <ul>
+                                           <li class="d-flex justify-content-between"><h5>Name:</h5><h5>{{discount.discount_name}}</h5></li>
+                                           <li class="d-flex justify-content-between"><h5>Discount Percent:</h5><h5>{{discount.discount_percent}}</h5></li>
+                                           <li class="d-flex justify-content-between"><h5>Discount Type:</h5><h5>{{discount.discount_type}}</h5></li>
+                                           <li class="d-flex justify-content-between"><h5>Current Status:</h5><h5>{{globalActiveInactiveCustomer discount.isactive}}</h5></li>
+                                           <li class="d-flex justify-content-between"><h5>CreatedAt:</h5><h5>{{discount.createdAt}}</h5></li>
+                                           
+                                       </ul>
+                                       
+                                       
+                                   </div>
+                                  
+                               </div>
+                           </div>
+                           <div class="col-md-8">
+                               <div class="customer-profile-nav-wrapper m-2">
+                                    <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Products</button>
+                                       
+                                    </div>
+                                    </nav>
+                                    <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                               <ul class="single-order-wrapper-summ">
+                                                   <li><span style="width: 40px; text-align:center">ID:#</span> <span style="width: 200px; text-align:left ">Name</span> <span>Price</span><span>Current Status</span> <span>Action</span></li>
+                                                   {{#each prodcuctlist}}
+                                                    <li><span style="width: 40px;">#{{this.product.id}}</span> <span style="width: 200px; text-align:left">{{this.product.name}}</span> <span>{{this.product.price}}</span> <span>{{globalActiveInactiveCustomer this.product.published}}</span> <a href="/admin/viewsingleproduct/{{this.product.id}}" class="btn btn-info"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                                   {{/each}}
+                                               </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  
+                                    </div>
+                               </div>
+                              
+                           </div>
+
+                       </div>
+                    </div>
+                   
+                     </div>
+                    </div>
+
+             </div>
+    </div>
+
+   
+
+    {{!-- mini footer --}}
+    <div class="footer_part">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="footer_iner text-center">
+                        <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- footer  --}}
+{{>footer}}
+
+     <script>
+        $(document).ready(function() {
+        $('#data-table').DataTable( {
+            order: [[3, 'desc']],
+            } );
+        } );
+    </script>

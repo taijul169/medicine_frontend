@@ -29,18 +29,13 @@ const { handlebars } = require("hbs");
 const router = express.Router();
 const { query } = require('express');
 const { json } = require('body-parser');
-const { METHODS } = require('http');
-const { Console } = require('console');
-const async = require('hbs/lib/async');
 const auth = require("../middleware/auth");
 
-const { isObject } = require('util');
-const { stringify } = require('nodemon/lib/utils');
-const req = require('express/lib/request');
+
 const authcustomerNormal = require('../middleware/authenticateCustomerNormal');
 
 // ---------------------------------------------------------------------------------medicine start -----------------------------------
-router.get('/admin/', (req,res)=>{
+router.get('/admin/',authadmin, (req,res,next)=>{
     try {
         fetch(`http://localhost:5000/api/products/allproducts`)
         .then(res => res.json())
@@ -57,8 +52,8 @@ router.get('/admin/', (req,res)=>{
                             totalSale = totalSale + parseInt(item.total) 
                             return item
                         })
-                        console.log("totalsale:",totalSale)
-                        res.render("admin/index",{productlist,userData:req.userData,customerlist,customerlist,totalSale,orderlist})
+                        console.log("cookie:",req.cookies.token)
+                        res.render("admin/index",{productlist,userData:req.userData,customerlist,customerlist,totalSale,orderlist,userData:req.userData})
                     })
             })
             
@@ -70,7 +65,7 @@ router.get('/admin/', (req,res)=>{
       
  });
 // create product route
- router.get('/admin/createproduct', (req,res)=>{
+ router.get('/admin/createproduct',authadmin, (req,res)=>{
     try {
         res.render("admin/createproduct")
     } catch (error) {
@@ -80,7 +75,7 @@ router.get('/admin/', (req,res)=>{
  });
 
 //  product list
- router.get('/admin/productlist', (req,res)=>{
+ router.get('/admin/productlist',authadmin, (req,res)=>{
     try {
         fetch(`http://localhost:5000/api/products/allproducts`)
         .then(res => res.json())
@@ -97,7 +92,7 @@ router.get('/admin/', (req,res)=>{
 
  
  //  get single product
- router.get('/admin/viewsingleproduct/:id', (req,res)=>{
+ router.get('/admin/viewsingleproduct/:id',authadmin, (req,res)=>{
     try {
         fetch(`http://localhost:5000/api/products/singleproduct/${req.params.id}`)
         .then(res => res.json())
@@ -112,7 +107,7 @@ router.get('/admin/', (req,res)=>{
  });
 
   //  get order list
-  router.get('/admin/allorderlist', (req,res)=>{
+  router.get('/admin/allorderlist',authadmin, (req,res)=>{
     try {
         fetch(`http://localhost:5000/api/order/getallorders`)
         .then(res => res.json())
@@ -126,7 +121,7 @@ router.get('/admin/', (req,res)=>{
  });
 
    //  new order lsit
-   router.get('/admin/neworderlist', (req,res)=>{
+   router.get('/admin/neworderlist',authadmin, (req,res)=>{
     try {
         fetch(`http://localhost:5000/api/order/getallordersbystatus/pending`)
         .then(res => res.json())
@@ -139,7 +134,7 @@ router.get('/admin/', (req,res)=>{
       
  });
    //  get single order
-   router.get('/admin/viewsingleorder/:id', (req,res)=>{
+   router.get('/admin/viewsingleorder/:id',authadmin, (req,res)=>{
     try {
         let total = 0;
         fetch(`http://localhost:5000/api/order/order/${req.params.id}`)
@@ -159,7 +154,7 @@ router.get('/admin/', (req,res)=>{
  });
 
 //  order status update
-  router.get('/admin/updateorderstatus/:status/:id', async(req,res)=>{
+  router.get('/admin/updateorderstatus/:status/:id',authadmin, async(req,res)=>{
     try {
         const response =  await (fetch(`http://localhost:5000/api/order/orderstatusupdate/${req.params.status}/${req.params.id}`, 
     { 
@@ -185,7 +180,7 @@ router.get('/admin/', (req,res)=>{
 
  
 //    all clients
-   router.get('/admin/clientlist', (req,res)=>{
+   router.get('/admin/clientlist',authadmin, (req,res)=>{
     try {
         fetch(`http://localhost:5000/api/order/getallcustomers`)
         .then(res => res.json())
@@ -199,7 +194,7 @@ router.get('/admin/', (req,res)=>{
  });
 
 //  single client
-router.get('/admin/viewsingleclient/:id', (req,res)=>{
+router.get('/admin/viewsingleclient/:id',authadmin, (req,res)=>{
     try {
         fetch(`http://localhost:5000/api/order/getsinglecustomerorderhistory/${req.params.id}`)
         .then(res => res.json())
@@ -212,7 +207,7 @@ router.get('/admin/viewsingleclient/:id', (req,res)=>{
  });
 
 //  find best client
-router.get('/admin/findbestclient', (req,res)=>{
+router.get('/admin/findbestclient',authadmin, (req,res)=>{
     try {
         res.render("admin/findbestclients",{userData:req.userData})
     } catch (error) {
@@ -221,12 +216,12 @@ router.get('/admin/findbestclient', (req,res)=>{
  });
 
 
- router.post('/admin/bestcustomer', (req,res)=>{
+ router.post('/admin/bestcustomer',authadmin, (req,res)=>{
     try {
         
         axios.post("http://localhost:5000/api/order/findbestclient",req.body)
            .then(response =>{
-               res.render("admin/findbestclients",{CustomerData:response.data,userData:req.userData,bodyData:req.body})
+               res.render("admin/findbestclients",{CustomerData:response.data,userData:req.userData,bodyData:req.body,userData:req.userData})
            })
            .catch(err => console.log(err))
     } catch (error) {
@@ -235,7 +230,7 @@ router.get('/admin/findbestclient', (req,res)=>{
 });
 
 // admin login
-router.get('/admin/login', (req,res)=>{
+router.get('/login', (req,res)=>{
     try {
         res.render('admin/login')
     } catch (error) {
@@ -263,6 +258,175 @@ router.post('/admin/login', (req,res)=>{
        console.log("error",error)
     }
 });
+
+//admin login
+router.get('/admin/profile', authadmin, (req,res)=>{
+   res.render("admin/adminprofile",{userData:req.userData})
+});
+
+
+//get discount list 
+router.get('/admin/offerlist', authadmin, (req,res)=>{
+    
+    try {
+        fetch(`http://localhost:5000/api/discount/getalldiscount`)
+        .then(res => res.json())
+        .then(offerlist =>{
+            res.render("admin/discountlist",{userData:req.userData,offerlist})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+    
+ });
+
+
+ // admin/createoffer
+router.post('/admin/offerlist', authadmin, (req,res)=>{
+    try {
+        
+        axios.post("http://localhost:5000/api/discount/adddiscount",req.body)
+           .then(response =>{
+               console.log("response for login",response)
+               if(response.status === 200){
+                fetch(`http://localhost:5000/api/discount/getalldiscount`)
+                .then(res => res.json())
+                .then(offerlist =>{
+                    res.render("admin/discountlist",{userData:req.userData,offerlist,msg:'Success! New Offer Created',type:'success'})
+                })
+                
+               }  
+           })
+           .catch(err =>{
+            fetch(`http://localhost:5000/api/discount/getalldiscount`)
+            .then(res => res.json())
+            .then(offerlist =>{
+                res.render("admin/discountlist",{userData:req.userData,offerlist,msg:"Invalid Data!!",type:'danger'})
+            })
+            
+           })
+    } catch (error) {
+     res.render("admin/discountlist",{userData:req.userData,offerlist})
+       console.log("error",error)
+    }
+});
+
+
+// admin/updateoffer
+router.post('/admin/updateoffer', authadmin, (req,res)=>{
+    try {
+        
+        axios.put(`http://localhost:5000/api/discount/updatesinglediscount/${req.body.discount_id}`,req.body)
+           .then(response =>{
+               console.log("response for login",response)
+               if(response.status === 200){
+                fetch(`http://localhost:5000/api/discount/getalldiscount`)
+                .then(res => res.json())
+                .then(offerlist =>{
+                    res.render("admin/discountlist",{userData:req.userData,offerlist,msg:'Success! Data Updated',type:'success'})
+                })
+               }  
+           })
+           .catch(err =>{
+            fetch(`http://localhost:5000/api/discount/getalldiscount`)
+            .then(res => res.json())
+            .then(offerlist =>{
+                res.render("admin/discountlist",{userData:req.userData,offerlist,msg:"Invalid Data!!",type:'danger'})
+            })
+            
+           })
+    } catch (error) {
+     res.render("admin/discountlist",{userData:req.userData,offerlist})
+       console.log("error",error)
+    }
+});
+
+ //get discount list 
+router.get('/admin/updateoffer', authadmin, (req,res)=>{
+    
+    try {
+        fetch(`http://localhost:5000/api/discount/getalldiscount`)
+        .then(res => res.json())
+        .then(offerlist =>{
+            res.render("admin/discountlist",{userData:req.userData,offerlist})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+    
+ });
+
+ //  single offer with product list
+router.get('/admin/viewsingleoffer/:id',authadmin, (req,res)=>{
+    try {
+        fetch(`http://localhost:5000/api/discount/getitemsbydiscountid/${req.params.id}`)
+        .then(res => res.json())
+        .then(prodcuctlist =>{
+            //console.log("single discunt product list:",prodcuctlist)
+            fetch(`http://localhost:5000/api/products/allproducts`)
+            .then(res => res.json())
+            .then(productlistAll =>{
+                let discountedProduct = prodcuctlist.items.map((item,idx)=>{
+                    return item.product.id
+                })
+                console.log("discounted product:",discountedProduct) 
+                productlistAll = productlistAll.filter((item,idx)=>{
+                    for( var i=0;i<discountedProduct.length;i++){
+                         item.id !== discountedProduct[i]
+                        
+                    }
+                   
+                })
+               console.log("productlistAll:",productlistAll)
+                res.render("admin/singleoffer-productlist",{prodcuctlist:prodcuctlist.items,discount:prodcuctlist.discount,userData:req.userData,productlistAll})
+            })
+           
+        })
+    } catch (error) {
+        console.log(error);
+    }   
+ });
+
+
+ router.post('/admin/additemtooffer', async(req,res)=>{
+    try {
+        console.log("req.body",req.body)
+        req.body.product_id.map((item,idx)=>{
+            axios.post("http://localhost:5000/api/discount/additemtodiscount/1",{
+                discount_id:req.body.discount_id,
+                product_id:item
+            
+           })
+           .then(response =>{
+            if(response.status === 200){
+                req.session.message={
+                    type:'alert-success',
+                    intro:'Created!',
+                    message:'city with area updated'
+                }
+                res.redirect(`/admin/viewsingleoffer/${req.body.discount_id}`)
+            }
+               //console.log("response for add user",response)
+              
+           })
+           .catch(err =>{
+            req.session.message={
+                type:'alert-warning',
+                intro:'Created!',
+                message:'AlReady Exist!!'
+            }
+            res.redirect(`/admin/viewsingleoffer/${req.body.discount_id}`)
+             //console.log("error",err)
+           })
+        })
+
+      
+    } catch (error) {
+        console.log(error);
+    }   
+ });
+
+
 //--------------------------------------------------------------------------------- medicine end--------------------------------------- 
 
 

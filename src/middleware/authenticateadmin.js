@@ -4,13 +4,17 @@ const dotenv =  require('dotenv');
 const fetch  = require("node-fetch");
 const axios =  require("axios");
 
-const root_url = 'http://192.168.0.121:9010'
+const root_url = 'http://192.168.0.51:9010'
 
 const authadmin = async (req, res, next) =>{
     console.log('i am inside authenticate')
     try {
         // console.log("auth is working");
-        const token = req.cookies.jwtokenadmin;
+        const token = req.cookies.accesstoken;
+        console.log("token:",token)
+        let data ={
+            token:req.cookies.accesstoken
+        }
         //const token = 'Ra3vzP42fnY7GPWr8SodDqaizAfx3sn';
     //    await axios(`http://localhost:8080/api/shop/authenticate/${token}`)
     //     .then(singleDocData =>{
@@ -21,7 +25,14 @@ const authadmin = async (req, res, next) =>{
     //         //res.render("admin/single-order",{singleorder})
     //     })
        
-   await fetch(`http://localhost:8080/api/admin/authenticate/${token}`)
+   await fetch(`http://localhost:5000/api/admin/adminauthenticate`,{
+    method: "POST", // or 'PUT'
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+       
+   })
     .then(res =>res.json())
     .then(singleDocData =>{
         //console.log("shop data", singleDocData)
@@ -32,13 +43,10 @@ const authadmin = async (req, res, next) =>{
                 intro:'Created!',
                 message:'Login Please!!'
             }
-            res.redirect("/admin/login") 
+            res.redirect("/login") 
         }
         else{
             if(singleDocData.jwtoken == token){
-              // for(var i=0;i< singleDocData.userData.length;i++){
-            //     singleDocData.userData[i].PhotoPath = `${root_url}${singleDocData.userData[i].PhotoPath}`  
-            // }
             req.userData = singleDocData;
     
             return next()
@@ -49,7 +57,7 @@ const authadmin = async (req, res, next) =>{
                     intro:'Created!',
                     message:'Login Please!!'
                 }
-                res.redirect("/admin/login") 
+                res.redirect("/login") 
             } 
             
             
@@ -63,7 +71,7 @@ const authadmin = async (req, res, next) =>{
  
     } catch (error){
         console.log(error)
-        res.redirect("/admin/login")
+        res.redirect("/login")
         
     }
 }
