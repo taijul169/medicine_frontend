@@ -43,7 +43,7 @@ router.get('/admin/',authadmin, (req,res,next)=>{
             fetch(`http://localhost:5000/api/order/getallorders`)
             .then(res => res.json())
             .then(orderlist =>{
-               
+                
                 fetch(`http://localhost:5000/api/order/getallcustomers`)
                     .then(res => res.json())
                     .then(customerlist =>{
@@ -52,8 +52,14 @@ router.get('/admin/',authadmin, (req,res,next)=>{
                             totalSale = totalSale + parseInt(item.total) 
                             return item
                         })
-                        console.log("cookie:",req.cookies.token)
-                        res.render("admin/index",{productlist,userData:req.userData,customerlist,customerlist,totalSale,orderlist,userData:req.userData})
+
+                        let today = new Date();
+                        console.log("today",today)
+                       const orderlistToday = orderlist.filter((item,idx)=>{
+                            return item.createdAt == today
+                        })
+                        
+                        res.render("admin/index",{productlist,userData:req.userData,customerlist,customerlist,totalSale,orderlist,userData:req.userData,orderlistToday})
                     })
             })
             
@@ -369,15 +375,11 @@ router.get('/admin/viewsingleoffer/:id',authadmin, (req,res)=>{
                 let discountedProduct = prodcuctlist.items.map((item,idx)=>{
                     return item.product.id
                 })
+               
+                productlistAll = productlistAll.filter(item => !discountedProduct.includes(item.id))
                 console.log("discounted product:",discountedProduct) 
-                productlistAll = productlistAll.filter((item,idx)=>{
-                    for( var i=0;i<discountedProduct.length;i++){
-                         item.id !== discountedProduct[i]
-                        
-                    }
-                   
-                })
                console.log("productlistAll:",productlistAll)
+              
                 res.render("admin/singleoffer-productlist",{prodcuctlist:prodcuctlist.items,discount:prodcuctlist.discount,userData:req.userData,productlistAll})
             })
            
@@ -391,6 +393,14 @@ router.get('/admin/viewsingleoffer/:id',authadmin, (req,res)=>{
  router.post('/admin/additemtooffer', async(req,res)=>{
     try {
         console.log("req.body",req.body)
+        if(!req.body.product_id){
+            req.session.message={
+                type:'alert-warning',
+                intro:'Created!',
+                message:'No new item has been added!!'
+            }
+            res.redirect(`/admin/viewsingleoffer/${req.body.discount_id}`)
+        }
         req.body.product_id.map((item,idx)=>{
             axios.post("http://localhost:5000/api/discount/additemtodiscount/1",{
                 discount_id:req.body.discount_id,
@@ -402,7 +412,7 @@ router.get('/admin/viewsingleoffer/:id',authadmin, (req,res)=>{
                 req.session.message={
                     type:'alert-success',
                     intro:'Created!',
-                    message:'city with area updated'
+                    message:'New item has been added'
                 }
                 res.redirect(`/admin/viewsingleoffer/${req.body.discount_id}`)
             }
@@ -592,6 +602,11 @@ router.get('/admin/viewsingleoffer/:id',authadmin, (req,res)=>{
      
      
  })
+
+
+
+
+
 
 // ====================================================================== customer module start===========================================================================
 
