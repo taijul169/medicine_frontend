@@ -36,14 +36,14 @@ const authadmin = async (req, res, next) =>{
     .then(res =>res.json())
     .then(singleDocData =>{
         //console.log("shop data", singleDocData)
-         console.log(singleDocData)
+        // console.log(singleDocData)
         if(!singleDocData){
             req.session.message={
                 type:'alert-danger',
                 intro:'Created!',
                 message:'Login Please!!'
             }
-            res.redirect("/login") 
+            res.redirect("/admin/login") 
         }
         else{
             if(singleDocData.jwtoken == token){
@@ -57,7 +57,7 @@ const authadmin = async (req, res, next) =>{
                     intro:'Created!',
                     message:'Login Please!!'
                 }
-                res.redirect("/login") 
+                res.redirect("/admin/login") 
             } 
             
             

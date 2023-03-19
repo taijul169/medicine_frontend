@@ -118,6 +118,14 @@ hbs.registerHelper("OrderProgress",(status)=>{
   </div>
       `)
   })
+  hbs.registerHelper('deliveredOrNot',(status,id)=>{
+      console.log("data",status,id)
+      if(status == 'Pending'){
+        return new handlebars.SafeString(`<a href="/admin/updateorderstatus/Delivered/${id}" class="btn btn-secondary">Make It Delivered</a>`)  
+      }
+  })
+
+
 // pagination
 hbs.registerHelper("ShopPagination",(totalPages)=>{
     console.log("totalPages:",totalPages)
@@ -364,6 +372,11 @@ hbs.registerHelper("statusDisplay",(status)=>{
   
   if(status == 'Received'){
     return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-sm bg-default-light ">
+    <i class="fas fa-check"></i> ${status}
+    </a>`)
+  }
+  if(status == 'Verified'){
+    return new handlebars.SafeString(`<a href="javascript:void(0);" class="btn btn-success ">
     <i class="fas fa-check"></i> ${status}
     </a>`)
   }

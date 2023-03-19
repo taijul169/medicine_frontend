@@ -33,7 +33,7 @@ const auth = require("../middleware/auth");
 
 
 const authcustomerNormal = require('../middleware/authenticateCustomerNormal');
-
+http://localhost:5000/api/order/getorderfortoday
 // ---------------------------------------------------------------------------------medicine start -----------------------------------
 router.get('/admin/',authadmin, (req,res,next)=>{
     try {
@@ -48,18 +48,38 @@ router.get('/admin/',authadmin, (req,res,next)=>{
                     .then(res => res.json())
                     .then(customerlist =>{
                         let totalSale =0;
+                        let totalSaleToday =0;
+                        let totalStock =0;
                         orderlist.map((item,idx)=>{
                             totalSale = totalSale + parseInt(item.total) 
                             return item
                         })
 
-                        let today = new Date();
-                        console.log("today",today)
+                        const date = new Date();
+
+                        let day = date.getDate();
+                        let month = date.getMonth() + 1;
+                        let year = date.getFullYear();
+
+                        // This arrangement can be altered based on how we want the date's format to appear.
+                        let currentDate = `${day}-${month}-${year}`;
                        const orderlistToday = orderlist.filter((item,idx)=>{
-                            return item.createdAt == today
+                            return item.createdDate == currentDate
                         })
+                        // finding today's sale
+                        orderlistToday.map((item,idx)=>{
+                            totalSaleToday = totalSaleToday + parseInt(item.total) 
+                            return item
+                        })
+
+                        // finding total stock
+                        productlist.map((item,idx)=>{
+                            totalStock = totalStock + parseInt(item.stock) 
+                            return item
+                        })
+                        console.log("productlist",productlist)
                         
-                        res.render("admin/index",{productlist,userData:req.userData,customerlist,customerlist,totalSale,orderlist,userData:req.userData,orderlistToday})
+                        res.render("admin/index",{productlist,userData:req.userData,customerlist,customerlist,totalSale,orderlist,userData:req.userData,orderlistToday,totalSaleToday,totalStock})
                     })
             })
             
@@ -73,7 +93,7 @@ router.get('/admin/',authadmin, (req,res,next)=>{
 // create product route
  router.get('/admin/createproduct',authadmin, (req,res)=>{
     try {
-        res.render("admin/createproduct")
+        res.render("admin/createproduct",{userData:req.userData})
     } catch (error) {
         console.log(error)
     }
@@ -236,7 +256,7 @@ router.get('/admin/findbestclient',authadmin, (req,res)=>{
 });
 
 // admin login
-router.get('/login', (req,res)=>{
+router.get('/admin/login', (req,res)=>{
     try {
         res.render('admin/login')
     } catch (error) {
@@ -436,6 +456,22 @@ router.get('/admin/viewsingleoffer/:id',authadmin, (req,res)=>{
     }   
  });
 
+  //get code list
+  router.get('/admin/code', authadmin, (req,res)=>{
+    
+    try {
+        fetch(`http://localhost:5000/api/auth/getallcodes`)
+        .then(res => res.json())
+        .then(codelist =>{
+            res.render("admin/codelist",{userData:req.userData,codelist})
+        })
+    } catch (error) {
+        console.log(error);
+    } 
+    
+ });
+
+
 
 //--------------------------------------------------------------------------------- medicine end--------------------------------------- 
 
@@ -602,7 +638,6 @@ router.get('/admin/viewsingleoffer/:id',authadmin, (req,res)=>{
      
      
  })
-
 
 
 

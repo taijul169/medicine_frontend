@@ -1,0 +1,102 @@
+{{>header}}
+{{!-- sidenav --}}
+ {{>nav}}
+
+<section class="main_content dashboard_part">
+    {{commonheaderadmin userData}}
+    {{!-- .common-inner-content  --}}
+        <div class="common-inner-content p-5">
+            <div class="col-sm-12">
+                <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="card-title">Code list</h5>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card-body p-5">
+                <div class="table-responsive">
+                    <div id="data-table_wrapper" class="dataTables_wrapper">
+                        
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="datatable table table-bordered hover-table dataTable"
+                                    id="data-table" role="grid">
+                                    <thead >
+
+                                        <tr role="row">
+                                            <th>ID</th>
+                                            <th>CreateAt</th>
+                                            <th>Phone</th>
+                                            <th>name</th>
+                                            <th>Status</th>
+                                            <th>Code</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each codelist}}
+                                        {{!-- single patient --}}
+                                        <tr role="row" class="odd">
+                                            <td class="">#{{this.id}}</td>
+                                            <td>
+                                                <span class="user-name" style="color: black;font-weight:bold">{{this.createdDate}}</span>
+                                            </td>
+                                            <td class="fw-bold"><span>{{this.phone}} </span><span
+                                                    class="d-block"></span></td>
+                                             <td class="fw-bold"><span class="user-name">{{this.name}} </span><span
+                                                    class="d-block"></span></td>
+                                            <td>{{statusDisplay this.status}}</td>
+                                            
+                                            <td class="fw-bold" >
+                                               <h4 style="color: turquoise;"> {{this.code}}</h4>
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                                
+                            
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+
+        </div>
+    </div>
+
+   
+
+    {{!-- mini footer --}}
+    <div class="footer_part">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="footer_iner text-center">
+                        <p>2020 © Influence - Designed by<a href="#"> Dashboard</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{!-- footer  --}}
+{{>footer}}
+
+   <script>
+        $(document).ready(function() {
+        $('#data-table').DataTable( {
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+             order: [[3, 'desc']],
+            } );
+        } );
+    </script>

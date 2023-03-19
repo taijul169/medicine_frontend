@@ -6,13 +6,17 @@
    {{commonheaderadmin userData}}
      {{!-- .common-inner-content  --}}
                <div class="common-inner-content p-5">
-                <div class="col-sm-12">
+                   <div class="w-100 text-end my-4">
+                       <a href="/admin/allorderlist" class="btn btn-secondary">Order list</a>
+                   </div>
+                    
+                    <div class="col-sm-12" >
                         <div class="card">
                             {{#if message}}
                                <div class="alert  alert-dismissible fade show alert_custom  alert-success mb-1" role="alert" id="custom_alert_box">
                                   <strong>Success</strong> Order status updated.
                                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                              </div>
+                               </div>
                             {{/if}}
                            
                             <div class="card-header">
@@ -24,7 +28,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body p-0">
+                            <div class="card-body p-0" id="invoice">
                                 <div class="ms-panel p-3">
                                     <div class="ms-panel-header header-mini">
                                     <div class="d-flex justify-content-between">
@@ -80,18 +84,23 @@
                                         <tfoot>
                                             <tr>
                                             <td colspan="4">Total Cost: </td>
-                                            <td>৳{{total}}</td>
+                                            <td class="fw-bold">৳{{total}}</td>
                                             </tr>
                                         </tfoot>
                                         </table>
                                     </div>
-                                    <div class="invoice-buttons text-right">
-                                        <a href="#" class="btn btn-primary mr-2">Print Invoice</a>
-                                        <a href="/admin/updateorderstatus/Delivered/{{singleorder.order.id}}" class="btn btn-secondary">Make It Delivered</a>
-                                    </div>
+                                   
 
                                     </div>
                                 </div>
+                            </div>
+                            <div class="card-footer">
+                                 <div class="invoice-buttons text-right">
+                                        <a href="#" class="btn btn-info mr-2" onclick="generatePDF()">Download Invoice</a>
+                                        <a href="#" class="btn btn-warning mr-2" onclick="printInvoice()">Print</a>
+                                        {{deliveredOrNot  singleorder.order.status singleorder.order.id}}
+                                        
+                                 </div>
                             </div>
                         </div>
                     </div>
@@ -116,3 +125,20 @@
 
 {{!-- footer  --}}
 {{>footer}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+ const generatePDF = ()=>{
+  var element = document.getElementById('invoice');
+  html2pdf(element);
+    
+}
+ const printInvoice = ()=>{ 
+    w=window.open();
+    w.document.write($('#invoice').html());
+    w.print();
+    w.close();
+    
+}
+
+</script>
